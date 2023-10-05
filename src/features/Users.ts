@@ -13,9 +13,9 @@ export const userSlice = createSlice({
     name: "users",
     initialState,
     reducers: {
-        addUser: (state, action) => {},
-        updateUser: (state, action) => {},
-        removeUser: (state, action) => {},
+        addUser: () => {},
+        updateUser: () => {},
+        removeUser: () => {},
     },
 })
 
