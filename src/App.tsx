@@ -21,7 +21,18 @@ function App() {
     }
 
     const handleAddUser = () => {
-        dispatch(addUser({ name: user.name, username: user.userName }))
+        dispatch(
+            addUser({
+                id: usersList[usersList.length - 1].id + 1,
+                name: user.name,
+                username: user.userName,
+            })
+        )
+
+        setUser({
+            name: "",
+            userName: "",
+        })
     }
 
     return (
@@ -30,12 +41,14 @@ function App() {
                 <input
                     onChange={handleInputChange}
                     value={user.name}
+                    name="name"
                     className="px-4 py-2 border border-indigo-700 rounded-md"
                     type="text"
                     placeholder="Name..."
                 />
                 <input
                     value={user.userName}
+                    name="userName"
                     onChange={handleInputChange}
                     className="px-4 py-2 border border-indigo-700 rounded-md"
                     type="text"
@@ -54,14 +67,18 @@ function App() {
                         return (
                             <li
                                 key={user.id}
-                                className="border border-indigo-700 p-4 rounded-md"
+                                className="bg-indigo-200 border border-indigo-700 p-4 rounded-md"
                             >
                                 <p>
-                                    <span>Name:</span>
+                                    <span className="text-indigo-900 font-bold">
+                                        Name:
+                                    </span>
                                     {user.name}
                                 </p>
                                 <p>
-                                    <span>Username:</span>
+                                    <span className="text-indigo-900 font-bold">
+                                        Username:
+                                    </span>
                                     {user.username}
                                 </p>
                             </li>
