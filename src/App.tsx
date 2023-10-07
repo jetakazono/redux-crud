@@ -1,21 +1,22 @@
 import "./App.css"
 import { useSelector, useDispatch } from "react-redux"
-import { addUser } from "./features/Users"
+import { addUser, removeUser, updateUser } from "./features/Users"
 import { User } from "./features/Users"
 import { useState } from "react"
 
 function App() {
     const dispatch = useDispatch()
     const usersList = useSelector((state) => state.userReducer.value)
-    const [user, setUser] = useState({
+    const [userInput, setUserInput] = useState({
         name: "",
         userName: "",
     })
+    const [newUserName, setNewUserName] = useState("")
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value, name } = e.target
-        setUser({
-            ...user,
+        setUserInput({
+            ...userInput,
             [name]: value,
         })
     }
@@ -24,15 +25,24 @@ function App() {
         dispatch(
             addUser({
                 id: usersList[usersList.length - 1].id + 1,
-                name: user.name,
-                username: user.userName,
+                name: userInput.name,
+                username: userInput.userName,
             })
         )
 
-        setUser({
+        setUserInput({
             name: "",
             userName: "",
         })
+    }
+
+    const handleUpdateUser = (id: number, newUserName: string) => {
+        dispatch(updateUser({ id, username: newUserName }))
+        setNewUserName("")
+    }
+
+    const handleDeleteUser = (id: number) => {
+        dispatch(removeUser({ id }))
     }
 
     return (
@@ -40,14 +50,14 @@ function App() {
             <div className="p-4 flex gap-4">
                 <input
                     onChange={handleInputChange}
-                    value={user.name}
+                    value={userInput.name}
                     name="name"
                     className="px-4 py-2 border border-indigo-700 rounded-md"
                     type="text"
                     placeholder="Name..."
                 />
                 <input
-                    value={user.userName}
+                    value={userInput.userName}
                     name="userName"
                     onChange={handleInputChange}
                     className="px-4 py-2 border border-indigo-700 rounded-md"
@@ -62,25 +72,54 @@ function App() {
                 </button>
             </div>
             <div className=" p-4 flex gap-6 w-full justify-center">
-                <ul className="p-4 flex flex-col gap-6 w-1/2">
+                <ul className="p-4 flex flex-col gap-6">
                     {usersList.map((user: User) => {
                         return (
                             <li
                                 key={user.id}
-                                className="bg-indigo-200 border border-indigo-700 p-4 rounded-md"
+                                className="bg-indigo-200 border border-indigo-700 p-4 rounded-md shadow-lg shadow-indigo-500/50"
                             >
                                 <p>
-                                    <span className="text-indigo-900 font-bold">
+                                    <span className="text-indigo-900 font-bold mr-1">
                                         Name:
                                     </span>
                                     {user.name}
                                 </p>
                                 <p>
-                                    <span className="text-indigo-900 font-bold">
+                                    <span className="text-indigo-900 font-bold mr-1">
                                         Username:
                                     </span>
                                     {user.username}
                                 </p>
+                                <div className="flex gap-2">
+                                    <input
+                                        onChange={(e) =>
+                                            setNewUserName(e.target.value)
+                                        }
+                                        className="px-4 py-2 border border-indigo-700 rounded-md"
+                                        type="text"
+                                        placeholder="New Username..."
+                                    />
+                                    <button
+                                        className="px-2 py-2 bg-indigo-500 text-white rounded-md uppercase text-sm hover:bg-indigo-400 hover:scale-110 transition-all ease-in-out"
+                                        onClick={() =>
+                                            handleUpdateUser(
+                                                user.id,
+                                                newUserName
+                                            )
+                                        }
+                                    >
+                                        Update User
+                                    </button>
+                                    <button
+                                        className="px-2 py-2 bg-indigo-500 text-white rounded-md uppercase text-sm hover:bg-indigo-400 hover:scale-110 transition-all ease-in-out"
+                                        onClick={() =>
+                                            handleDeleteUser(user.id)
+                                        }
+                                    >
+                                        Delete User
+                                    </button>
+                                </div>
                             </li>
                         )
                     })}
