@@ -14,10 +14,17 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         addUser: (state, action) => {
+            console.log(state.value)
+
             state.value.push(action.payload)
+            console.log(state.value)
         },
         updateUser: () => {},
-        removeUser: () => {},
+        removeUser: (state, action) => {
+            state.value = state.value.filter((user) => {
+                return user.id !== action.payload.id
+            })
+        },
     },
 })
 

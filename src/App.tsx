@@ -1,6 +1,6 @@
 import "./App.css"
 import { useSelector, useDispatch } from "react-redux"
-import { addUser } from "./features/Users"
+import { addUser, removeUser } from "./features/Users"
 import { User } from "./features/Users"
 import { useState } from "react"
 
@@ -10,6 +10,7 @@ function App() {
     const [user, setUser] = useState({
         name: "",
         userName: "",
+        newUserName: "",
     })
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +33,12 @@ function App() {
         setUser({
             name: "",
             userName: "",
+            newUserName: "",
         })
+    }
+
+    const handleDeleteUser = (id: number) => {
+        dispatch(removeUser({ id }))
     }
 
     return (
@@ -62,25 +68,45 @@ function App() {
                 </button>
             </div>
             <div className=" p-4 flex gap-6 w-full justify-center">
-                <ul className="p-4 flex flex-col gap-6 w-1/2">
+                <ul className="p-4 flex flex-col gap-6">
                     {usersList.map((user: User) => {
                         return (
                             <li
                                 key={user.id}
-                                className="bg-indigo-200 border border-indigo-700 p-4 rounded-md"
+                                className="bg-indigo-200 border border-indigo-700 p-4 rounded-md shadow-lg shadow-indigo-500/50"
                             >
                                 <p>
-                                    <span className="text-indigo-900 font-bold">
+                                    <span className="text-indigo-900 font-bold mr-1">
                                         Name:
                                     </span>
                                     {user.name}
                                 </p>
                                 <p>
-                                    <span className="text-indigo-900 font-bold">
+                                    <span className="text-indigo-900 font-bold mr-1">
                                         Username:
                                     </span>
                                     {user.username}
                                 </p>
+                                <div className="flex gap-2">
+                                    <input
+                                        name="newUserName"
+                                        onChange={handleInputChange}
+                                        className="px-4 py-2 border border-indigo-700 rounded-md"
+                                        type="text"
+                                        placeholder="New Username..."
+                                    />
+                                    <button className="px-2 py-2 bg-indigo-500 text-white rounded-md uppercase text-sm hover:bg-indigo-400 hover:scale-110 transition-all ease-in-out">
+                                        Update User
+                                    </button>
+                                    <button
+                                        className="px-2 py-2 bg-indigo-500 text-white rounded-md uppercase text-sm hover:bg-indigo-400 hover:scale-110 transition-all ease-in-out"
+                                        onClick={() =>
+                                            handleDeleteUser(user.id)
+                                        }
+                                    >
+                                        Delete User
+                                    </button>
+                                </div>
                             </li>
                         )
                     })}
